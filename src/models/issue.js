@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.ENUM(['task', 'bug', 'story']),
     status: DataTypes.ENUM(['backlog', 'development', 'progress', 'done']),
     priority: DataTypes.ENUM(['highest', 'high', 'medium', 'low', 'lowest']),
+    listPosition: DataTypes.NUMBER,
     description: DataTypes.TEXT,
     userId: DataTypes.NUMBER
   }, {});

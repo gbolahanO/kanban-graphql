@@ -10,11 +10,11 @@ const conf = require(__dirname + '/../config/db.js')['development'];
 const db = {};
 
 let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
+// if (config.use_env_variable) {
+//   sequelize = new Sequelize(process.env[config.use_env_variable], config);
+// } else {
   sequelize = new Sequelize(conf.database, conf.username, conf.password, conf);
-}
+// }
 
 fs
   .readdirSync(__dirname)

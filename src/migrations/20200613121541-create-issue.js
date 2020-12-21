@@ -23,6 +23,9 @@ module.exports = {
         type: Sequelize.ENUM,
         values: ['highest', 'high', 'medium', 'low', 'lowest']
       },
+      listPosition: {
+        type: Sequelize.INTEGER
+      },
       description: {
         type: Sequelize.TEXT
       },
@@ -37,6 +40,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    }, {
+      charset: "utf8"
     });
   },
   down: (queryInterface, Sequelize) => {
