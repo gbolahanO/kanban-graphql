@@ -1,49 +1,105 @@
-import { Comment, IssueUsers } from '../models';
+import { Comment, IssueUsers, Issue, User } from '../models';
 
-const Mutations = {
+const Mutation = {
   createIssue: async (_, args, ctx, info) => {
-    const Issue = await Issue.create({
-      ...args.data
+    const findIssues = await Issue.findAll({});
+
+    let listPosition;
+    let listPositions = []
+    findIssues.map(issue => listPositions.push(issue.listPosition));
+    if (listPositions.length > 0) {
+      listPosition = Math.max(...listPositions) + 1;
+    } else {
+      listPosition = 1;
+    }
+
+    const newIssue = await Issue.create({
+      ...args.data,
+      userId: args.data.reporter,
+      listPosition
     });
-    return Issue;
+
+    if (args.data.assignee) {
+      const assignees = args.data.assignee;
+      delete args.data.assignee;
+      const assigneesData = assignees.map(a => ({userId: a, issueId: newIssue.id}));
+      await IssueUsers.bulkCreate(assigneesData);
+    }
+
+    const issue = await Issue.findOne({
+      where: {
+        id: newIssue.id
+      },
+      include: [
+        {
+          model: User,
+          as: 'assignees',
+          attributes: ['id', 'name', 'avatarUri', 'email', 'createdAt']
+        }
+      ]
+    });
+
+    return issue;
   },
   updateIssue: async (_, args, ctx, info) => {
-    const Issue = await Issue.update({ ...args.data }, {
+    await Issue.update({ ...args.data }, {
       where: {
         id: args.issueId
       },
     });
-    return Issue;
+
+    if (args.data.assignee) {
+      await IssueUsers.destroy({where: {
+        issueId: args.issueId
+      }});
+      const assignees = args.data.assignee;
+      const assigneesData = assignees.map(a => ({userId: a, issueId: args.issueId}));
+      await IssueUsers.bulkCreate(assigneesData);
+    }
+
+    const updatedIssue = await Issue.findOne({
+      where: {
+        id: args.issueId
+      },
+      include: [
+        {
+          model: User,
+          as: 'assignees',
+          attributes: ['id', 'name', 'avatarUri', 'email', 'createdAt']
+        }
+      ]
+    });
+    return updatedIssue;
   },
   deleteIssue: async (_, args, ctx, info) => {
-    const Issue = await Issue.destroy({
+    const deletedIssue = await Issue.destroy({
       where: {
         id: args.issueId
       }
     });
-    return issue;
+    return deletedIssue;
   },
   createComment: async (_, args, ctx, info) => {
-    const comment = await Comment.create({
+    const createComment = await Comment.create({
       ...args.data
     });
-    return comment;
+    return createComment;
   },
   updateComment: async (_, args, ctx, info) => {
-    const comment = await Comment.update({ ...args.data }, {
+    const updateComment = await Comment.update({ ...args.data }, {
       where: {
         id: args.commentId
       }
     });
-    return comment;
+    return updateComment;
   },
   deleteComment: async (_, args, ctx, info) => {
-    const comment = await Comment.destroy({
+    const deleteComment = await Comment.destroy({
       where: {
         id: args.commentId
       }
     });
-    return comment;
+    return deleteComment;
   },
   assignIssue: async (_, args, ctx, info) => {
     const issueUser = await IssueUsers.create({
@@ -53,4 +109,4 @@ const Mutations = {
   }
 }
 
-export default Mutations;
+export default Mutation;

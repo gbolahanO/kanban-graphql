@@ -3,7 +3,10 @@ module.exports = (sequelize, DataTypes) => {
   const Issue = sequelize.define('Issue', {
     title: DataTypes.STRING,
     type: DataTypes.ENUM(['task', 'bug', 'story']),
-    status: DataTypes.ENUM(['backlog', 'development', 'progress', 'done']),
+    status: {
+      type: DataTypes.ENUM(['backlog', 'development', 'progress', 'done']),
+      defaultValue: 'backlog'
+    },
     priority: DataTypes.ENUM(['highest', 'high', 'medium', 'low', 'lowest']),
     listPosition: DataTypes.NUMBER,
     description: DataTypes.TEXT,

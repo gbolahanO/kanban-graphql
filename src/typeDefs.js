@@ -39,6 +39,7 @@ const typeDefs = gql`
     status: IssueStatus
     priority: Priority
     description: String
+    listPosition: Int
     reporter: User
     assignees: [User!]
     comments: [Comment!]
@@ -57,7 +58,7 @@ const typeDefs = gql`
     getUserIssues(userId: Int): [Issue!]
   }
 
-  type Mutations {
+  type Mutation {
     createIssue(data: createIssueInput): Issue
     updateIssue(issueId: Int, data: createIssueInput): Issue
     deleteIssue(issueId: Int): Issue
@@ -70,11 +71,10 @@ const typeDefs = gql`
   input createIssueInput {
     title: String
     type: IssueType
-    status: IssueStatus
     priority: Priority
     description: String
     reporter: Int
-    assignee: Int
+    assignee: [Int]
   }
 
   input createCommentInput {
