@@ -42,11 +42,20 @@ const Mutation = {
     return issue;
   },
   updateIssue: async (_, args, ctx, info) => {
-    await Issue.update({ ...args.data }, {
-      where: {
-        id: args.issueId
-      },
-    });
+    if (args.data.reporter) {
+      await Issue.update({
+        ...args.data, userId: args.data.reporter }, {
+        where: {
+          id: args.issueId
+        },
+      });
+    } else {
+      await Issue.update({ ...args.data }, {
+        where: {
+          id: args.issueId
+        },
+      });
+    }
 
     if (args.data.assignee) {
       await IssueUsers.destroy({where: {

@@ -60,7 +60,7 @@ const typeDefs = gql`
 
   type Mutation {
     createIssue(data: createIssueInput): Issue
-    updateIssue(issueId: Int, data: createIssueInput): Issue
+    updateIssue(issueId: Int, data: updateIssueInput): Issue
     deleteIssue(issueId: Int): Issue
     createComment(data: createCommentInput): Comment
     updateComment(commentId: Int, data: createCommentInput): Comment
@@ -77,8 +77,20 @@ const typeDefs = gql`
     assignee: [Int]
   }
 
+  input updateIssueInput {
+    title: String
+    type: IssueType
+    status: IssueStatus
+    priority: Priority
+    description: String
+    reporter: Int
+    assignee: [Int]
+  }
+
   input createCommentInput {
-    body: String
+    body: String!
+    issueId: Int!
+    userId: Int!
   }
 
   input assignIssueInput {
