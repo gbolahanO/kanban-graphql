@@ -16,7 +16,7 @@ const IssueResolver = {
   reporter: async (_, args, ctx, info) => {
     const reporter = await User.findOne({
       where: {
-        id: _.userId
+        id: _.UserId
       }
     });
     return reporter;
