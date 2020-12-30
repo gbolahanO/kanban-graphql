@@ -28,6 +28,9 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: 'postgres',
     quoteIdentifiers: false,
-    logging: false
+    logging: false,
+    dialectOptions: {
+      ssl: true
+    }
   }
 }
