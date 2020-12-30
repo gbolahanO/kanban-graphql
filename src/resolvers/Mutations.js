@@ -81,12 +81,26 @@ const Mutation = {
     return updatedIssue;
   },
   deleteIssue: async (_, args, ctx, info) => {
-    const deletedIssue = await Issue.destroy({
+    // Find issue to delete
+    const delIssue = await Issue.findOne({
+      where: {
+        id: args.issueId
+      },
+      include: [
+        {
+          model: User,
+          as: 'assignees',
+          attributes: ['id', 'name', 'avatarUri', 'email', 'createdAt']
+        }
+      ]
+    });
+
+    await Issue.destroy({
       where: {
         id: args.issueId
       }
     });
-    return deletedIssue;
+    return delIssue;
   },
   createComment: async (_, args, ctx, info) => {
     const createComment = await Comment.create({

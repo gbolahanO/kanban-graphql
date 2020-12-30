@@ -15,9 +15,29 @@ module.exports = {
       updatedAt: faker.date.recent(),
     }, {
       userId: 3,
-      issueId: 1,
+      issueId: 2,
       createdAt: faker.date.recent(),
       updatedAt: faker.date.recent(),
+    }, {
+      userId: 2,
+      issueId: 2,
+      createdAt: faker.date.recent(),
+      updatedAt: faker.date.recent(),
+    }, {
+      userId: 3,
+      issueId: 3,
+      createdAt: faker.date.recent(),
+      updatedAt: faker.date.recent()
+    }, {
+      userId: 2,
+      issueId: 4,
+      createdAt: faker.date.recent(),
+      updatedAt: faker.date.recent(),
+    }, {
+      userId: 1,
+      issueId: 4,
+      createdAt: faker.date.recent(),
+      updatedAt: faker.date.recent()
     }], {});
   },
 
